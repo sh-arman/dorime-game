@@ -16,7 +16,7 @@ HEIGHT=600
 screen=pygame.display.set_mode((WIDTH,HEIGHT))
 
 #caption and icon
-pygame.display.set_caption("Space Rocket")
+pygame.display.set_caption("Dorime Bonk")
 icon=pygame.image.load("icon.png")
 pygame.display.set_icon(icon)
 
