@@ -17,8 +17,6 @@ screen=pygame.display.set_mode((WIDTH,HEIGHT))
 
 #caption and icon
 pygame.display.set_caption("Dorime Bonk")
-icon=pygame.image.load("icon.png")
-pygame.display.set_icon(icon)
 
 #player
 player_image=pygame.image.load("cheems1.png")
@@ -26,22 +24,19 @@ player_size=30
 player_pos=[int(WIDTH/2.2),int(HEIGHT-3*player_size)]
 # player_pos=[int(WIDTH/2),int(HEIGHT-3*player_size)]
 
-#enemy
+#rocks
 enemy_image=pygame.image.load("asteroid.png")
 enemy_size = 50
 enemy_pos = [random.randint(0,WIDTH-enemy_size),random.randint(0,HEIGHT)]
 enemy_list=[enemy_pos]
 enemy_speed=0
 
-#background image
+#background image & sound
 background = pygame.image.load("background.png")
-
-#background sound
-# mixer.music.load("background.ogg")
 mixer.music.load("Song.ogg")
-mixer.music.play(-1)
+mixer.music.play(1)
 
-#basic
+
 score=0
 game_over=False
 clock=pygame.time.Clock()
@@ -52,7 +47,7 @@ game_over_font=pygame.font.Font("font.otf",60,italic=True)
 
 def speed(score, enemy_speed):
     if score<10:
-        enemy_speed=5
+        enemy_speed=2
     elif score<20:
         enemy_speed=6
     elif score<30:
@@ -64,15 +59,18 @@ def speed(score, enemy_speed):
     else:
         enemy_speed=20
     return enemy_speed
+
 def drop_enemies(enemy_list):
     delay = random.random()
     if len(enemy_list)<8 and delay<0.06:
         x_pos=random.randint(0,WIDTH-enemy_size)
         y_pos=0
         enemy_list.append([x_pos,y_pos])
+
 def draw_enemies(enemy_list):
     for enemy_pos in enemy_list:
         screen.blit(enemy_image,(enemy_pos[0],enemy_pos[1]))
+
 def new_enemy_pos(enemy_list, score):
     for idx, enemy_pos in enumerate(enemy_list):
         if enemy_pos[1]>=0 and enemy_pos[1]<HEIGHT:
@@ -81,11 +79,13 @@ def new_enemy_pos(enemy_list, score):
             enemy_list.pop(idx)
             score+=1
     return score
+
 def multiple_collision(enemy_list, player_pos):
     for enemy_pos in enemy_list:
         if collision(player_pos, enemy_pos):
             return True
     return False
+
 def collision(player_pos, enemy_pos):
     p_x=player_pos[0]
     p_y=player_pos[1]
@@ -141,7 +141,7 @@ while(running == True):
         game_over=multiple_collision(enemy_list,player_pos)
         draw_enemies(enemy_list)
         screen.blit(player_image,(player_pos[0],player_pos[1]))
-        clock.tick(30)
+        clock.tick(20)
         pygame.display.update()
     elif game_over==True:
         gameover(game_over, score)
